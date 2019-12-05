@@ -25,6 +25,7 @@ import cudf
 import ctypes
 import cuml
 import warnings
+import subprocess
 
 from cuml.common.base import Base
 from cuml.utils import get_cudf_column_ptr, get_dev_array_ptr, \
@@ -185,6 +186,9 @@ class NearestNeighbors(Base):
         self.n_indices = 0
         self.metric = metric
         self.algorithm = algorithm
+        if(self.algorithm == "sweet"):
+            subprocess.call(["knn_sweet-master/make"])
+            subprocess.call(["knn_sweet-master/knnjoin", "145057", "145057", "4", "800", "800", "200", "test/Skin_NonSkin.txt", "test/Skin_NonSkin.txt"])
 
     def __getstate__(self):
         state = self.__dict__.copy()
