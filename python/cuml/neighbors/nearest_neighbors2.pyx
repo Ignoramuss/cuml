@@ -89,9 +89,7 @@ cdef extern from "cuml/neighbors/knnjoin.hpp":
         int arg5,
         int arg6,
         float *arg7,
-        float *arg8,
-        int64_t *res_I,
-        float *res_D,  
+        float *arg8
     ) except +
 
 
@@ -186,7 +184,7 @@ class NearestNeighbors(Base):
         verbose : boolean print verbose logs
         handle : cumlHandle the cumlHandle resources to use
         algorithm : string the query algorithm to use. Currently, only
-                    'brute' and 'sweet' are supported.
+                    'brute' is supported.
         metric : string distance metric to use. (default="euclidean").
         """
 
@@ -200,9 +198,6 @@ class NearestNeighbors(Base):
         self.n_indices = 0
         self.metric = metric
         self.algorithm = algorithm
-        # if(self.algorithm == "sweet"):
-        #     subprocess.call(["knn_sweet-master/make"])
-        #     subprocess.call(["knn_sweet-master/knnjoin", "145057", "145057", "4", "800", "800", "200", "test/Skin_NonSkin.txt", "test/Skin_NonSkin.txt"])
 
     def __getstate__(self):
         state = self.__dict__.copy()
@@ -363,35 +358,32 @@ class NearestNeighbors(Base):
                 2,
                 <int>n_neighbors,
                 <float*>x_ctype_st_source,
-                <float*>x_ctype_st_query,
-                <int64_t*>I_ptr,
-                <float*>D_ptr,                
+                <float*>x_ctype_st_query                
             )
 
-        I_ndarr = I_ndarr.reshape((N, n_neighbors))
-        D_ndarr = D_ndarr.reshape((N, n_neighbors))
+        # I_ndarr = I_ndarr.reshape((N, n_neighbors))
+        # D_ndarr = D_ndarr.reshape((N, n_neighbors))
 
-        if isinstance(X, cudf.DataFrame):
-            inds = cudf.DataFrame()
-            for i in range(0, I_ndarr.shape[1]):
-                inds[str(i)] = I_ndarr[:, i]
+        # if isinstance(X, cudf.DataFrame):
+        #     inds = cudf.DataFrame()
+        #     for i in range(0, I_ndarr.shape[1]):
+        #         inds[str(i)] = I_ndarr[:, i]
 
-            dists = cudf.DataFrame()
-            for i in range(0, D_ndarr.shape[1]):
-                dists[str(i)] = D_ndarr[:, i]
+        #     dists = cudf.DataFrame()
+        #     for i in range(0, D_ndarr.shape[1]):
+        #         dists[str(i)] = D_ndarr[:, i]
 
-            return dists, inds
+        #     return dists, inds
 
-        elif isinstance(X, np.ndarray):
-            inds = np.asarray(I_ndarr)
-            dists = np.asarray(D_ndarr)
+        # elif isinstance(X, np.ndarray):
+        #     inds = np.asarray(I_ndarr)
+        #     dists = np.asarray(D_ndarr)
 
-        del I_ndarr
-        del D_ndarr
-        del X_m
+        # del I_ndarr
+        # del D_ndarr
+        # del X_m
 
-        del inputs
-        del sizes
+        # del inputs
+        # del sizes
 
-        return (dists, inds) if return_distance else inds
-        # return (D_ndarr, I_ndarr) if return_distance else I_ndarr
+        # return (dists, inds) if return_distance else inds
