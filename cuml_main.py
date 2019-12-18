@@ -16,7 +16,7 @@ gdf_float['dim_2'] = np.ascontiguousarray(np_float[:,2])
 print('n_samples = 3, n_dims = 3')
 print(gdf_float)
 
-nn_float = NearestNeighbors()
+nn_float = NearestNeighbors(algorithm="sweet")
 nn_float.fit(gdf_float)
 # get 3 nearest neighbors
 distances,indices = nn_float.kneighbors(gdf_float,n_neighbors=3)
