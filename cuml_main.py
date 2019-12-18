@@ -8,6 +8,12 @@ np_float = np.array([
   [2,2,4]  # Point 3
 ]).astype('float32')
 
+with open("Skin_NonSkin.txt") as ipf:
+  ip_list = []
+  for ip in ipf:
+    ip_list = ip_list.append(list(map(ip.split(), int)))
+  np_float = np.array(ip_list).astype('float32')
+
 gdf_float = cudf.DataFrame()
 gdf_float['dim_0'] = np.ascontiguousarray(np_float[:,0])
 gdf_float['dim_1'] = np.ascontiguousarray(np_float[:,1])
