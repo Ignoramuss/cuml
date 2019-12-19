@@ -45,15 +45,11 @@ print(distances_b)
 print(indices_s)
 print(distances_s)
 
-with open ("brute_force_results", "w") as bf:
-  bf.write(indices_b.to_string())
-  bf.write("\n\n\n")
-  bf.write(distances_b.to_string())
+indices_b.to_csv("bf_indices.csv")
+distances_b.to_csv("bf_distances.csv")
 
-with open ("sweet_knn_results", "w") as sf:
-  sf.write(indices_s.to_string())
-  sf.write("\n\n\n")
-  sf.write(distances_s.to_string())
+indices_s.to_csv("sweet_indices.csv")
+distances_s.to_csv("sweet_distances.csv")
 
 print("brute", (end - start))
 print("sweet", (endS - startS))
